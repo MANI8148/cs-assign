@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Local SQL injection classroom demonstration">
+  <title>SQL Injection Lab — Variant 1</title>
+  <link rel="stylesheet" href="/styles.css"><script src="/app.js" defer></script>
+</head>
+<body><main class="shell">
+  <header class="hero">
+    <p class="eyebrow">APPLICATION SECURITY LAB · VARIANT 1</p>
+    <h1>SQL Injection: Login Security</h1>
+    <p class="lede">Switch between an intentionally vulnerable login and a safe login protected by parameterized SQL and scrypt password hashing.</p>
+    <div class="local-warning"><strong>Local classroom demo only.</strong> The server binds to 127.0.0.1 and uses fictional accounts.</div>
+  </header>
+
+  <section class="panel payload-panel">
+    <div><p class="eyebrow">REPRODUCIBLE TEST</p><h2>SQL injection payload</h2>
+      <p class="muted">Use this as the username; use any password in vulnerable mode.</p></div>
+    <div class="payload-row"><code id="payload">admin' -- </code><button class="button button-secondary" id="fill-payload" type="button">Fill payload</button></div>
+  </section>
+
+  <section class="panel mode-panel">
+    <p class="eyebrow">FRONTEND MODE SWITCH</p><h2>Select login mode</h2>
+    <div class="mode-switch" role="group" aria-label="Login mode">
+      <button id="vulnerable-mode" class="mode-button active-danger" type="button" aria-pressed="true">Vulnerable mode</button>
+      <button id="safe-mode" class="mode-button" type="button" aria-pressed="false">Safe mode</button>
+    </div>
+    <div id="mode-description" class="mode-description danger-copy">⚠️ Vulnerable: username and password are concatenated into SQL. Use fictional test data only.</div>
+  </section>
+
+  <section class="panel login-panel">
+    <div class="panel-heading"><span id="mode-number" class="number">01</span><div>
+      <p id="mode-eyebrow" class="eyebrow">BEFORE FIX</p><h2 id="mode-title">Vulnerable login</h2></div></div>
+    <p id="mode-detail" class="muted">The backend directly concatenates the submitted values into the SQL query.</p>
+    <form id="login-form" class="login-form">
+      <label for="username">Username</label><input id="username" name="username" autocomplete="off" value="student" required>
+      <label for="password">Password</label><input id="password" name="password" type="text" autocomplete="off" value="StudentLab!" required>
+      <button id="submit-button" class="button button-danger" type="submit">Run vulnerable login</button>
+    </form>
+    <pre class="result" id="login-result" aria-live="polite">Choose a mode and submit a login request…</pre>
+  </section>
+
+  <section class="panel explanation">
+    <p class="eyebrow">SAFE MODE IMPLEMENTS TWO CONTROLS</p><h2>What changes in safe mode?</h2>
+    <ol><li><strong>Parameterized query:</strong> the username is supplied through a <code>?</code> placeholder, so SQL syntax in the input is treated as data.</li>
+      <li><strong>Password hashing:</strong> passwords are stored as salted scrypt hashes. The entered password is verified with <code>scrypt</code> and a timing-safe comparison; the original password is not used in the safe SQL query.</li>
+    </ol>
+    <p class="footnote">The plaintext password column exists only to make the vulnerable classroom exploit reproducible. Safe mode uses the salted hash fields. Never store plaintext passwords or deploy the vulnerable endpoint.</p>
+  </section>
+  <footer>SQL Injection Lab · Variant 1 · Node.js + SQLite · Localhost only</footer>
+</main></body></html>

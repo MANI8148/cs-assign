@@ -1,0 +1,14 @@
+{
+  "name": "sql-injection-variant-1-lab",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Local-only SQL injection teaching demo with vulnerable and parameterised login endpoints",
+  "type": "module",
+  "engines": {
+    "node": ">=22.5.0"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "reset-db": "node scripts/init-db.js"
+  }
+}
